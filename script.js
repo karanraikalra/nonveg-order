@@ -156,7 +156,7 @@ function addToCart(itemId) {
   renderCart();
 }
 
-function buildOrderMessage({ customerName, customerPhone, address, paymentMethod, entries, subtotal, grandTotal }) {
+function buildOrderMessage({ customerName, customerPhone, address, locationLink, paymentMethod, entries, subtotal, grandTotal }) {
   const itemLines = entries
     .map(({ item, quantity }) => `- ${item.name} x ${quantity} = ${money(item.price * quantity)}`)
     .join("\n");
@@ -167,6 +167,7 @@ function buildOrderMessage({ customerName, customerPhone, address, paymentMethod
     `Name: ${customerName}`,
     `Phone: ${customerPhone}`,
     `Address: ${address}`,
+    `Location: ${locationLink || "Not shared"}`,
     `Payment: ${paymentMethod}`,
     "Payment instruction: Customer can do payment through WhatsApp/UPI on 9417561120.",
     "",
@@ -177,6 +178,28 @@ function buildOrderMessage({ customerName, customerPhone, address, paymentMethod
     "Delivery: Free",
     `Total: ${money(grandTotal)}`
   ].join("\n");
+}
+
+function requestCustomerLocation() {
+  return new Promise((resolve) => {
+    if (!navigator.geolocation) {
+      resolve("");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        resolve(`https://www.google.com/maps?q=${latitude},${longitude}`);
+      },
+      () => resolve(""),
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
+      }
+    );
+  });
 }
 
 function showWhatsAppActions(message) {
@@ -269,7 +292,7 @@ cartItems.addEventListener("click", (event) => {
 
 searchInput.addEventListener("input", renderMenu);
 
-document.querySelector("#checkout-form").addEventListener("submit", (event) => {
+document.querySelector("#checkout-form").addEventListener("submit", async (event) => {
   event.preventDefault();
 
   if (!cart.size) {
@@ -285,6 +308,8 @@ document.querySelector("#checkout-form").addEventListener("submit", (event) => {
   const customerPhone = formData.get("phone");
   const address = formData.get("address");
   const paymentMethod = formData.get("payment");
+  confirmation.textContent = "Please allow location permission if you want your map location added to the WhatsApp order.";
+  const locationLink = await requestCustomerLocation();
   const paymentMessage = paymentMethod === "UPI Payment to 9417561120"
     ? " Please send the payment through UPI to 9417561120."
     : "";
@@ -292,13 +317,14 @@ document.querySelector("#checkout-form").addEventListener("submit", (event) => {
     customerName,
     customerPhone,
     address,
+    locationLink,
     paymentMethod,
     entries,
     subtotal,
     grandTotal
   });
 
-  confirmation.textContent = `Thanks, ${customerName}. Your order is ready to send on WhatsApp.${paymentMessage}`;
+  confirmation.textContent = `Thanks, ${customerName}. Your order is ready to send on WhatsApp.${locationLink ? " Your map location was added." : " Your map location was not added."}${paymentMessage}`;
   showWhatsAppActions(orderMessage);
   cart.clear();
   event.currentTarget.reset();

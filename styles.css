@@ -427,15 +427,24 @@ h2 {
   font-weight: 800;
 }
 
-.upi-note {
+.upi-note,
+.location-note {
   margin: -2px 0 0;
   padding: 10px 11px;
   border-radius: 6px;
-  background: #eef8f4;
-  color: var(--green);
   font-size: 0.9rem;
   font-weight: 800;
   line-height: 1.35;
+}
+
+.upi-note {
+  background: #eef8f4;
+  color: var(--green);
+}
+
+.location-note {
+  background: #fff5df;
+  color: #765018;
 }
 
 .checkout-form input,
