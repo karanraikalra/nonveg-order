@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rai Fish Centre - Food Ordering</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="hero-copy">
+      <p class="eyebrow">Fresh non-veg meals with free delivery</p>
+      <h1>Rai Fish Centre</h1>
+      <p class="subtitle">Fish, chicken, mutton, seafood, biryani, starters, and rolls ready for quick ordering.</p>
+      <div class="shop-info" aria-label="Restaurant details">
+        <span>Park Panorma Market, Shop No. 8, Bathinda</span>
+        <span>Call: 9872901342 / 9876304855</span>
+        <strong>Free delivery available</strong>
+      </div>
+    </div>
+    <div class="hero-side">
+      <img class="shop-banner" src="assets/rai-fish-centre-shop.jpeg" alt="Rai Fish Centre banner">
+      <a class="cart-link" href="#order-panel">View Cart <span id="cart-count">0</span></a>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="menu-section" aria-label="Restaurant menu">
+      <div class="section-heading">
+        <div>
+          <h2>Menu</h2>
+          <p>Choose items and add them to your order.</p>
+        </div>
+        <label class="search-box">
+          <span>Search</span>
+          <input id="search-input" type="search" placeholder="Chicken, biryani, fish...">
+        </label>
+      </div>
+
+      <div class="filters" aria-label="Menu categories">
+        <button class="filter active" type="button" data-filter="All">All</button>
+        <button class="filter" type="button" data-filter="Starters">Starters</button>
+        <button class="filter" type="button" data-filter="Mains">Mains</button>
+        <button class="filter" type="button" data-filter="Biryani">Biryani</button>
+        <button class="filter" type="button" data-filter="Seafood">Seafood</button>
+        <button class="filter" type="button" data-filter="Rolls">Rolls</button>
+      </div>
+
+      <div id="menu-grid" class="menu-grid"></div>
+    </section>
+
+    <aside id="order-panel" class="order-panel" aria-label="Order summary">
+      <div class="panel-heading">
+        <h2>Your Order</h2>
+        <p id="order-status">Add food items to begin.</p>
+      </div>
+
+      <div id="cart-items" class="cart-items empty">
+        <p>Your cart is empty.</p>
+      </div>
+
+      <div class="totals">
+        <div><span>Subtotal</span><strong id="subtotal">Rs 0</strong></div>
+        <div><span>Delivery</span><strong id="delivery">Free</strong></div>
+        <div class="grand-total"><span>Total</span><strong id="grand-total">Rs 0</strong></div>
+      </div>
+
+      <form id="checkout-form" class="checkout-form">
+        <label>
+          Name
+          <input required name="name" type="text" placeholder="Your name">
+        </label>
+        <label>
+          Phone
+          <input required name="phone" type="tel" placeholder="10-digit mobile number">
+        </label>
+        <label>
+          Delivery Address
+          <textarea required name="address" rows="3" placeholder="House no, street, area"></textarea>
+        </label>
+        <label>
+          Payment
+          <select name="payment">
+            <option>Cash on Delivery</option>
+            <option>UPI Payment to 9417561120</option>
+            <option>UPI on Delivery</option>
+            <option>Card on Delivery</option>
+          </select>
+        </label>
+        <p class="upi-note">For online payment, send money through UPI to <strong>9417561120</strong>.</p>
+        <button class="place-order" type="submit">Place Order</button>
+      </form>
+      <p id="confirmation" class="confirmation" role="status"></p>
+      <div id="whatsapp-actions" class="whatsapp-actions" hidden></div>
+    </aside>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
