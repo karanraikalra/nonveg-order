@@ -133,6 +133,13 @@ h2 {
   color: #ffd889;
 }
 
+.phone-text,
+.upi-note strong,
+.location-note strong {
+  color: inherit;
+  text-decoration: none;
+}
+
 .cart-link {
   display: inline-flex;
   align-items: center;

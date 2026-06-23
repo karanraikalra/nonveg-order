@@ -182,20 +182,29 @@ function buildOrderMessage({ customerName, customerPhone, address, locationLink,
 
 function requestCustomerLocation() {
   return new Promise((resolve) => {
+    let finished = false;
+    const finish = (value) => {
+      if (finished) return;
+      finished = true;
+      resolve(value);
+    };
+
+    window.setTimeout(() => finish(""), 3500);
+
     if (!navigator.geolocation) {
-      resolve("");
+      finish("");
       return;
     }
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
-        resolve(`https://www.google.com/maps?q=${latitude},${longitude}`);
+        finish(`https://www.google.com/maps?q=${latitude},${longitude}`);
       },
-      () => resolve(""),
+      () => finish(""),
       {
         enableHighAccuracy: true,
-        timeout: 10000,
+        timeout: 3000,
         maximumAge: 0
       }
     );
@@ -204,7 +213,8 @@ function requestCustomerLocation() {
 
 function redirectToWhatsApp(message) {
   const encodedMessage = encodeURIComponent(message);
-  window.location.href = `https://wa.me/919872901342?text=${encodedMessage}`;
+  const whatsappUrl = `https://api.whatsapp.com/send?phone=919872901342&text=${encodedMessage}`;
+  window.location.assign(whatsappUrl);
 }
 
 function updateQuantity(itemId, change) {
@@ -298,7 +308,7 @@ document.querySelector("#checkout-form").addEventListener("submit", async (event
   const customerPhone = formData.get("phone");
   const address = formData.get("address");
   const paymentMethod = formData.get("payment");
-  confirmation.textContent = "Please allow location permission if you want your map location added to the WhatsApp order.";
+  confirmation.textContent = "Opening WhatsApp. Please allow location permission if you want your map location added.";
   const locationLink = await requestCustomerLocation();
   const paymentMessage = paymentMethod === "UPI Payment to 9417561120"
     ? " Please send the payment through UPI to 9417561120."
