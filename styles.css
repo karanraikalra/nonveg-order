@@ -468,35 +468,42 @@ h2 {
   line-height: 1.4;
 }
 
-.whatsapp-actions {
+.floating-cart {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 20;
   display: grid;
-  gap: 8px;
-  margin-top: 12px;
+  gap: 2px;
+  min-width: 190px;
+  padding: 13px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  background: var(--charcoal);
+  color: #fff7ef;
+  box-shadow: 0 16px 34px rgba(32, 26, 24, 0.28);
+  text-decoration: none;
 }
 
-.whatsapp-actions[hidden] {
+.floating-cart[hidden] {
   display: none;
 }
 
-.whatsapp-actions p {
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.9rem;
-  line-height: 1.4;
+.floating-cart span {
+  color: #f5c066;
+  font-size: 0.76rem;
+  font-weight: 900;
+  text-transform: uppercase;
 }
 
-.whatsapp-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 42px;
-  padding: 10px 12px;
-  border-radius: 6px;
-  background: #25d366;
-  color: #102319;
-  font-weight: 900;
-  text-align: center;
-  text-decoration: none;
+.floating-cart strong {
+  font-size: 1rem;
+}
+
+.floating-cart small {
+  color: #eaded5;
+  font-size: 0.88rem;
+  font-weight: 800;
 }
 
 @media (max-width: 900px) {
@@ -536,5 +543,12 @@ h2 {
 
   .menu-grid {
     grid-template-columns: 1fr;
+  }
+
+  .floating-cart {
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
+    min-width: 0;
   }
 }

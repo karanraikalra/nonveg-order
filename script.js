@@ -109,7 +109,9 @@ const grandTotalEl = document.querySelector("#grand-total");
 const orderStatus = document.querySelector("#order-status");
 const searchInput = document.querySelector("#search-input");
 const confirmation = document.querySelector("#confirmation");
-const whatsappActions = document.querySelector("#whatsapp-actions");
+const floatingCart = document.querySelector("#floating-cart");
+const floatingCartTitle = document.querySelector("#floating-cart-title");
+const floatingCartTotal = document.querySelector("#floating-cart-total");
 
 const money = (amount) => `Rs ${amount.toLocaleString("en-IN")}`;
 
@@ -151,8 +153,6 @@ function addToCart(itemId) {
   const quantity = cart.get(itemId)?.quantity || 0;
   cart.set(itemId, { item, quantity: quantity + 1 });
   confirmation.textContent = "";
-  whatsappActions.hidden = true;
-  whatsappActions.innerHTML = "";
   renderCart();
 }
 
@@ -202,22 +202,9 @@ function requestCustomerLocation() {
   });
 }
 
-function showWhatsAppActions(message) {
-  const contacts = [
-    { label: "Send order to 9872901342", number: "919872901342" },
-    { label: "Send order to 9876304855", number: "919876304855" }
-  ];
-
+function redirectToWhatsApp(message) {
   const encodedMessage = encodeURIComponent(message);
-  whatsappActions.hidden = false;
-  whatsappActions.innerHTML = `
-    <p>Tap a button to send the full order details on WhatsApp.</p>
-    ${contacts.map((contact) => `
-      <a class="whatsapp-button" href="https://wa.me/${contact.number}?text=${encodedMessage}" target="_blank" rel="noopener">
-        ${contact.label}
-      </a>
-    `).join("")}
-  `;
+  window.location.href = `https://wa.me/919872901342?text=${encodedMessage}`;
 }
 
 function updateQuantity(itemId, change) {
@@ -246,6 +233,9 @@ function renderCart() {
   deliveryEl.textContent = subtotal > 0 ? "Free" : money(delivery);
   grandTotalEl.textContent = money(grandTotal);
   orderStatus.textContent = itemCount ? `${itemCount} item${itemCount === 1 ? "" : "s"} selected` : "Add food items to begin.";
+  floatingCart.hidden = itemCount === 0;
+  floatingCartTitle.textContent = `${itemCount} item${itemCount === 1 ? "" : "s"} added`;
+  floatingCartTotal.textContent = `${money(grandTotal)} total - tap to order`;
 
   if (!entries.length) {
     cartItems.className = "cart-items empty";
@@ -324,11 +314,11 @@ document.querySelector("#checkout-form").addEventListener("submit", async (event
     grandTotal
   });
 
-  confirmation.textContent = `Thanks, ${customerName}. Your order is ready to send on WhatsApp.${locationLink ? " Your map location was added." : " Your map location was not added."}${paymentMessage}`;
-  showWhatsAppActions(orderMessage);
+  confirmation.textContent = `Thanks, ${customerName}. Redirecting to WhatsApp now.${locationLink ? " Your map location was added." : " Your map location was not added."}${paymentMessage}`;
   cart.clear();
   event.currentTarget.reset();
   renderCart();
+  redirectToWhatsApp(orderMessage);
 });
 
 renderMenu();
